@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JEWERLY O&A — Fine Jewelry, Made to be Worn</title>
+<meta name="description" content="JEWERLY O&A — a curated collection of fine jewelry. Message us on WhatsApp to purchase.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          plum: {
+            50: '#f7f4fb',
+            100: '#efe8f6',
+            200: '#dccced',
+            300: '#c1a6de',
+            400: '#a179cb',
+            500: '#8455b4',
+            600: '#6b3f97',
+            700: '#552f79',
+            800: '#3d2159',
+            900: '#28153e',
+            950: '#180a29',
+          },
+        },
+        fontFamily: {
+          display: ['"Cormorant Garamond"', 'serif'],
+          body: ['Manrope', 'sans-serif'],
+        },
+      },
+    },
+  }
+</script>
+
+<style>
+  :root { --grain-opacity: 0.035; }
+  * { -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Manrope', sans-serif;
+    background-color: #fbfaf9;
+    color: #28153e;
+  }
+  .font-display { font-family: 'Cormorant Garamond', serif; }
+
+  .grain-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 60;
+    opacity: var(--grain-opacity);
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .letter-spaced { letter-spacing: 0.22em; }
+
+  .underline-fade {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    transition: background-size 0.35s ease;
+  }
+  .underline-fade:hover { background-size: 100% 1px; }
+
+  .card-media {
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(135deg, #efe8f6, #f7f4fb);
+  }
+  .card-media img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 1.1s cubic-bezier(.16,1,.3,1), filter 0.6s ease;
+  }
+  .catalog-card:hover .card-media img { transform: scale(1.06); }
+
+  .card-quickview {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .catalog-card:hover .card-quickview { opacity: 1; transform: translateY(0); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal { animation: fadeUp 0.7s cubic-bezier(.16,1,.3,1) both; }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .shimmer-text {
+    background: linear-gradient(90deg, #c1a6de 0%, #f7f4fb 25%, #8455b4 50%, #f7f4fb 75%, #c1a6de 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 6s linear infinite;
+  }
+
+  .skeleton {
+    background: linear-gradient(110deg, #ece5f4 8%, #f7f2fb 18%, #ece5f4 33%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s linear infinite;
+  }
+
+  .gallery-thumb.active { outline: 2px solid #6b3f97; outline-offset: 2px; }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 26s linear infinite;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .divider-diamond::before {
+    content: '';
+    display: inline-block;
+    width: 7px; height: 7px;
+    background: #a179cb;
+    transform: rotate(45deg);
+    margin: 0 14px;
+  }
+
+  ::selection { background: #dccced; color: #28153e; }
+
+  input[type="file"]::file-selector-button {
+    border: 1px solid #dccced;
+    background: #f7f4fb;
+    color: #552f79;
+    border-radius: 9999px;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  input[type="file"]::file-selector-button:hover { background: #efe8f6; }
+
+  .scrollbar-thin::-webkit-scrollbar { height: 6px; width: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #dccced; border-radius: 999px; }
+
+  .toast-enter { animation: toastIn 0.4s cubic-bezier(.16,1,.3,1) both; }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  [data-modal] { transition: opacity 0.3s ease; }
+
+  .lens-badge {
+    backdrop-filter: blur(6px);
+    background: rgba(40, 21, 62, 0.55);
+  }
+</style>
+</head>
+<body class="antialiased">
+<div class="grain-overlay"></div>
+
+<!-- ============ ANNOUNCEMENT BAR ============ -->
+<div class="bg-plum-900 text-plum-100 text-xs sm:text-[13px] py-2.5 overflow-hidden relative">
+  <div class="marquee-track letter-spaced uppercase">
+    <span class="px-6 flex items-center gap-2">Complimentary gift wrapping on every order <span class="divider-diamond"></span></span>
+    <span class="px-6 flex items-center gap-2">Certified hallmarked silver &amp; gold <span class="divider-diamond"></span></span>
+    <span class="px-6 flex items-center gap-2">Message us on WhatsApp for same-day replies <span class="divider-diamond"></span></span>
+    <span class="px-6 flex items-center gap-2">Complimentary gift wrapping on every order <span class="divider-diamond"></span></span>
+    <span class="px-6 flex items-center gap-2">Certified hallmarked silver &amp; gold <span class="divider-diamond"></span></span>
+    <span class="px-6 flex items-center gap-2">Message us on WhatsApp for same-day replies <span class="divider-diamond"></span></span>
+  </div>
+</div>
+
+<!-- ============ NAV ============ -->
+<header id="siteHeader" class="sticky top-0 z-40 bg-[#fbfaf9]/90 backdrop-blur-md border-b border-plum-100 transition-shadow">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 h-[76px] flex items-center justify-between">
+    <a href="#top" class="font-display text-2xl sm:text-3xl tracking-wide text-plum-900 select-none">
+      JEWERLY <span class="text-plum-500 italic">O&amp;A</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-9 text-[13px] letter-spaced uppercase text-plum-800">
+      <a href="#catalog" class="underline-fade">Collection</a>
+      <a href="#why-us" class="underline-fade">Our Promise</a>
+      <a href="#care" class="underline-fade">Care Guide</a>
+      <a href="#contact" class="underline-fade">Visit Us</a>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <button id="adminNavBtn" class="text-[11px] letter-spaced uppercase text-plum-500 hover:text-plum-800 transition-colors px-3 py-2">
+        Admin
+      </button>
+      <a id="navWhatsapp" href="#" target="_blank" rel="noopener"
+         class="hidden sm:flex items-center gap-2 bg-plum-900 hover:bg-plum-800 text-white text-[12px] letter-spaced uppercase px-5 py-2.5 rounded-full transition-colors">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A8.86 8.86 0 0 0 11.94 4C7.13 4 3.2 7.93 3.2 12.74c0 1.56.4 3.06 1.18 4.4L3 21.5l4.48-1.35a9.6 9.6 0 0 0 4.46 1.1h.01c4.8 0 8.73-3.92 8.73-8.73a8.7 8.7 0 0 0-2.6-6.2Zm-5.66 13.4h-.01a7.3 7.3 0 0 1-3.73-1.02l-.27-.16-2.66.8.8-2.58-.18-.27a7.3 7.3 0 0 1-1.12-3.87c0-4.03 3.29-7.32 7.34-7.32a7.28 7.28 0 0 1 7.31 7.34c0 4.04-3.29 7.32-7.33 7.32Zm4.02-5.48c-.22-.11-1.3-.64-1.5-.71-.2-.08-.35-.11-.5.11-.15.22-.57.71-.7.86-.13.15-.26.16-.48.05-.22-.11-.94-.35-1.79-1.11a6.7 6.7 0 0 1-1.24-1.55c-.13-.22-.01-.34.1-.45.1-.1.22-.26.33-.4.11-.13.15-.22.22-.37.07-.15.04-.28-.02-.4-.06-.11-.5-1.22-.69-1.67-.18-.44-.37-.38-.5-.38-.13-.01-.28-.01-.43-.01a.83.83 0 0 0-.6.28c-.2.22-.79.78-.79 1.9s.81 2.2.92 2.36c.11.15 1.6 2.47 3.89 3.46.54.24.97.38 1.3.48.55.17 1.04.15 1.44.09.44-.07 1.3-.53 1.48-1.05.18-.51.18-.95.13-1.05-.05-.1-.2-.16-.42-.27Z"/></svg>
+        WhatsApp
+      </a>
+      <button id="mobileMenuBtn" class="md:hidden p-2 text-plum-900">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobileMenu" class="hidden md:hidden border-t border-plum-100 bg-[#fbfaf9] px-5 py-4 space-y-3 text-sm letter-spaced uppercase text-plum-800">
+    <a href="#catalog" class="block py-1">Collection</a>
+    <a href="#why-us" class="block py-1">Our Promise</a>
+    <a href="#care" class="block py-1">Care Guide</a>
+    <a href="#contact" class="block py-1">Visit Us</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,#efe8f6_0%,transparent_45%),radial-gradient(circle_at_85%_75%,#f2e9fa_0%,transparent_50%)]"></div>
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 pt-14 sm:pt-20 pb-16 sm:pb-24 relative grid lg:grid-cols-12 gap-10 items-center">
+      <div class="lg:col-span-6 reveal">
+        <p class="letter-spaced uppercase text-plum-500 text-xs sm:text-sm mb-5">The Autumn Atelier Edit</p>
+        <h1 class="font-display text-5xl sm:text-6xl lg:text-[4.2rem] leading-[1.05] text-plum-950 mb-6">
+          Jewelry that<br class="hidden sm:block"> remembers <span class="italic shimmer-text">every moment.</span>
+        </h1>
+        <p class="text-plum-800/80 text-base sm:text-lg max-w-md mb-9 leading-relaxed">
+          Each piece in our collection is chosen for the way it catches light — and the way it catches memory. Handled by hand, priced honestly, delivered with care.
+        </p>
+        <div class="flex flex-wrap items-center gap-4">
+          <a href="#catalog" class="inline-flex items-center gap-3 bg-plum-900 hover:bg-plum-700 text-white px-7 py-3.5 rounded-full text-sm letter-spaced uppercase transition-all hover:gap-4">
+            View the Collection
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#why-us" class="text-plum-800 text-sm letter-spaced uppercase underline-fade">Why collectors trust us</a>
+        </div>
+
+        <div class="flex items-center gap-8 mt-14 pt-8 border-t border-plum-200/70 max-w-md">
+          <div>
+            <p class="font-display text-3xl text-plum-900">2,347</p>
+            <p class="text-[11px] letter-spaced uppercase text-plum-500 mt-1">Pieces Rehomed</p>
+          </div>
+          <div>
+            <p class="font-display text-3xl text-plum-900">4.87<span class="text-lg">/5</span></p>
+            <p class="text-[11px] letter-spaced uppercase text-plum-500 mt-1">Customer Rating</p>
+          </div>
+          <div>
+            <p class="font-display text-3xl text-plum-900">11</p>
+            <p class="text-[11px] letter-spaced uppercase text-plum-500 mt-1">Years Curating</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-6 relative reveal" style="animation-delay:.15s">
+        <div class="relative aspect-[4/5] max-w-md mx-auto rounded-[2rem] overflow-hidden shadow-[0_40px_80px_-30px_rgba(40,21,62,0.45)]">
+          <img src="https://images.unsplash.com/photo-1599459183200-59c7687a0275?q=80&w=1200&auto=format&fit=crop" alt="Model wearing layered gold and gemstone jewelry" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-plum-950/50 via-transparent to-transparent"></div>
+        </div>
+        <div class="absolute -bottom-6 -left-4 sm:-left-10 bg-white/90 backdrop-blur rounded-2xl shadow-xl p-4 sm:p-5 w-52 sm:w-60 border border-plum-100 reveal" style="animation-delay:.4s">
+          <p class="text-[11px] letter-spaced uppercase text-plum-500 mb-1">Just Sold</p>
+          <p class="font-display text-lg text-plum-900 leading-tight">Vintage Amethyst Halo Ring</p>
+          <p class="text-xs text-plum-500 mt-1">to a collector in Marrakesh, 6 minutes ago</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FILTER + CATALOG ============ -->
+  <section id="catalog" class="max-w-7xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-10">
+      <div>
+        <p class="letter-spaced uppercase text-plum-500 text-xs mb-3">The Collection</p>
+        <h2 class="font-display text-4xl sm:text-5xl text-plum-950">Pieces available now</h2>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="relative">
+          <input id="searchInput" type="text" placeholder="Search by name…"
+                 class="w-44 sm:w-56 bg-white border border-plum-200 rounded-full pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-plum-300 placeholder:text-plum-400">
+          <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 text-plum-400" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        </div>
+        <select id="sortSelect" class="bg-white border border-plum-200 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-plum-300 text-plum-700">
+          <option value="curated">Curated Order</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="name-asc">Name: A–Z</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="collectionTabs" class="flex gap-2 overflow-x-auto scrollbar-thin pb-2 mb-10 -mx-1 px-1">
+      <!-- populated by JS -->
+    </div>
+
+    <div id="catalogGrid" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-7">
+      <!-- populated by JS -->
+    </div>
+
+    <div id="emptyState" class="hidden flex-col items-center text-center py-24">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#a179cb" stroke-width="1.3" class="mb-5"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <p class="font-display text-2xl text-plum-800 mb-2">No pieces match just yet</p>
+      <p class="text-plum-500 text-sm">Try a different search term, or clear your filters.</p>
+    </div>
+  </section>
+
+  <!-- ============ WHY CHOOSE US ============ -->
+  <section id="why-us" class="bg-plum-950 text-plum-50 py-20 sm:py-28 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.06]" style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:26px 26px;"></div>
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 relative">
+      <p class="letter-spaced uppercase text-plum-300 text-xs mb-3">Our Promise</p>
+      <h2 class="font-display text-4xl sm:text-5xl mb-14 max-w-xl">Why collectors keep coming back to O&amp;A</h2>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-plum-800/60 rounded-2xl overflow-hidden">
+        <div class="bg-plum-950 p-8 hover:bg-plum-900 transition-colors">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c1a6de" stroke-width="1.4" class="mb-5"><path d="M12 2 3 7l9 5 9-5-9-5Z"/><path d="M3 12l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg>
+          <h3 class="font-display text-xl mb-2">Hand-Verified Craft</h3>
+          <p class="text-plum-300/80 text-sm leading-relaxed">Every stone is checked and every clasp tested by our own atelier before a listing ever goes live.</p>
+        </div>
+        <div class="bg-plum-950 p-8 hover:bg-plum-900 transition-colors">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c1a6de" stroke-width="1.4" class="mb-5"><path d="M12 21s-7.5-5-9.6-9.4C.6 7.8 3 4.5 6.4 4.5c2 0 3.4 1 5.6 3.3 2.2-2.3 3.6-3.3 5.6-3.3 3.4 0 5.8 3.3 4 7.1C19.5 16 12 21 12 21Z"/></svg>
+          <h3 class="font-display text-xl mb-2">Bought With Confidence</h3>
+          <p class="text-plum-300/80 text-sm leading-relaxed">A real person replies to every WhatsApp message, usually within the hour — no bots, no scripts.</p>
+        </div>
+        <div class="bg-plum-950 p-8 hover:bg-plum-900 transition-colors">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c1a6de" stroke-width="1.4" class="mb-5"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>
+          <h3 class="font-display text-xl mb-2">Discreet Packaging</h3>
+          <p class="text-plum-300/80 text-sm leading-relaxed">Every order leaves in an unmarked, cushioned box — because what you buy yourself is nobody's business.</p>
+        </div>
+        <div class="bg-plum-950 p-8 hover:bg-plum-900 transition-colors">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c1a6de" stroke-width="1.4" class="mb-5"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg>
+          <h3 class="font-display text-xl mb-2">Honest Pricing</h3>
+          <p class="text-plum-300/80 text-sm leading-relaxed">No inflated "was" prices. What you see listed is the number we stand behind — always negotiable in good faith.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CARE INSTRUCTIONS ============ -->
+  <section id="care" class="max-w-7xl mx-auto px-5 sm:px-8 py-20 sm:py-28 grid lg:grid-cols-12 gap-12 items-start">
+    <div class="lg:col-span-5">
+      <p class="letter-spaced uppercase text-plum-500 text-xs mb-3">Care Guide</p>
+      <h2 class="font-display text-4xl sm:text-5xl text-plum-950 mb-6">Keep it as bright as day one</h2>
+      <p class="text-plum-800/80 leading-relaxed mb-8">A little routine care keeps gold, silver, and gemstones looking the way they did the day they arrived at your door.</p>
+      <a id="careWhatsapp" href="#" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-plum-700 text-sm letter-spaced uppercase underline-fade">
+        Ask us a care question
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+    <div class="lg:col-span-7 grid sm:grid-cols-2 gap-5">
+      <div class="bg-white border border-plum-100 rounded-2xl p-6">
+        <p class="font-display text-3xl text-plum-300 mb-3">01</p>
+        <h3 class="font-semibold text-plum-900 mb-2">Store separately</h3>
+        <p class="text-sm text-plum-600 leading-relaxed">Keep each piece in its own soft pouch to prevent scratching between metals and stones.</p>
+      </div>
+      <div class="bg-white border border-plum-100 rounded-2xl p-6">
+        <p class="font-display text-3xl text-plum-300 mb-3">02</p>
+        <h3 class="font-semibold text-plum-900 mb-2">Last on, first off</h3>
+        <p class="text-sm text-plum-600 leading-relaxed">Apply perfume and lotion before jewelry, and remove pieces before showering or sleeping.</p>
+      </div>
+      <div class="bg-white border border-plum-100 rounded-2xl p-6">
+        <p class="font-display text-3xl text-plum-300 mb-3">03</p>
+        <h3 class="font-semibold text-plum-900 mb-2">Warm water clean</h3>
+        <p class="text-sm text-plum-600 leading-relaxed">A soft cloth and lukewarm water with mild soap restores shine — no harsh chemicals needed.</p>
+      </div>
+      <div class="bg-white border border-plum-100 rounded-2xl p-6">
+        <p class="font-display text-3xl text-plum-300 mb-3">04</p>
+        <h3 class="font-semibold text-plum-900 mb-2">Annual check-up</h3>
+        <p class="text-sm text-plum-600 leading-relaxed">Message us once a year and we'll talk you through a quick at-home clasp and setting check.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT / CTA ============ -->
+  <section id="contact" class="max-w-7xl mx-auto px-5 sm:px-8 pb-24">
+    <div class="bg-gradient-to-br from-plum-800 to-plum-950 rounded-[2rem] px-6 sm:px-16 py-16 sm:py-20 text-center relative overflow-hidden">
+      <div class="absolute -top-24 -right-24 w-72 h-72 bg-plum-500/20 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-plum-300/10 rounded-full blur-3xl"></div>
+      <p class="letter-spaced uppercase text-plum-300 text-xs mb-4 relative">Visit Us</p>
+      <h2 class="font-display text-4xl sm:text-5xl text-white mb-6 relative max-w-2xl mx-auto">Have a piece in mind? Just ask.</h2>
+      <p class="text-plum-200/80 max-w-md mx-auto mb-9 relative">Every question, hold request, or custom sizing starts the same simple way — a message on WhatsApp.</p>
+      <a id="ctaWhatsapp" href="#" target="_blank" rel="noopener" class="relative inline-flex items-center gap-3 bg-white text-plum-900 hover:bg-plum-100 px-8 py-4 rounded-full text-sm letter-spaced uppercase transition-colors">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A8.86 8.86 0 0 0 11.94 4C7.13 4 3.2 7.93 3.2 12.74c0 1.56.4 3.06 1.18 4.4L3 21.5l4.48-1.35a9.6 9.6 0 0 0 4.46 1.1h.01c4.8 0 8.73-3.92 8.73-8.73a8.7 8.7 0 0 0-2.6-6.2Z"/></svg>
+        Message on WhatsApp
+      </a>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="border-t border-plum-100 py-10">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-plum-500">
+    <p class="font-display text-xl text-plum-900">JEWERLY O&amp;A</p>
+    <p>&copy; <span id="year"></span> JEWERLY O&amp;A. Every piece, one message away.</p>
+    <button id="adminNavBtnFooter" class="text-xs letter-spaced uppercase text-plum-400 hover:text-plum-700">Admin Access</button>
+  </div>
+</footer>
+
+<!-- ============ PRODUCT DETAIL MODAL ============ -->
+<div id="productModal" data-modal class="fixed inset-0 z-50 hidden opacity-0 items-center justify-center p-0 sm:p-6">
+  <div id="productModalBackdrop" class="absolute inset-0 bg-plum-950/70 backdrop-blur-sm"></div>
+  <div class="relative bg-white w-full h-full sm:h-auto sm:max-h-[92vh] sm:rounded-3xl sm:max-w-4xl overflow-y-auto grid md:grid-cols-2">
+    <button id="closeProductModal" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/90 shadow flex items-center justify-center text-plum-800 hover:bg-plum-50">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+
+    <div class="bg-plum-50 p-5 sm:p-8">
+      <div id="modalMainImageWrap" class="aspect-square rounded-2xl overflow-hidden bg-white shadow-sm mb-4">
+        <img id="modalMainImage" src="" alt="" class="w-full h-full object-cover cursor-zoom-in">
+      </div>
+      <div id="modalThumbs" class="flex gap-3 overflow-x-auto scrollbar-thin"></div>
+    </div>
+
+    <div class="p-6 sm:p-10 flex flex-col">
+      <p id="modalCollection" class="letter-spaced uppercase text-plum-500 text-xs mb-3"></p>
+      <h3 id="modalName" class="font-display text-3xl sm:text-4xl text-plum-950 mb-3 leading-tight"></h3>
+      <p id="modalPrice" class="text-2xl font-semibold text-plum-700 mb-6"></p>
+      <p id="modalDescription" class="text-plum-700/90 leading-relaxed mb-8 whitespace-pre-line"></p>
+
+      <div class="mt-auto space-y-3">
+        <a id="modalWhatsappBtn" href="#" target="_blank" rel="noopener"
+           class="w-full flex items-center justify-center gap-3 bg-plum-900 hover:bg-plum-700 text-white py-4 rounded-full text-sm letter-spaced uppercase transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A8.86 8.86 0 0 0 11.94 4C7.13 4 3.2 7.93 3.2 12.74c0 1.56.4 3.06 1.18 4.4L3 21.5l4.48-1.35a9.6 9.6 0 0 0 4.46 1.1h.01c4.8 0 8.73-3.92 8.73-8.73a8.7 8.7 0 0 0-2.6-6.2Z"/></svg>
+          Purchase via WhatsApp
+        </a>
+        <div class="flex items-center justify-center gap-2 text-xs text-plum-400">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          No payment details shared here — everything is confirmed directly with our team.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ADMIN LOGIN MODAL ============ -->
+<div id="loginModal" data-modal class="fixed inset-0 z-50 hidden opacity-0 items-center justify-center p-5">
+  <div class="absolute inset-0 bg-plum-950/70 backdrop-blur-sm" id="loginBackdrop"></div>
+  <div class="relative bg-white w-full max-w-sm rounded-3xl p-8 sm:p-10">
+    <button id="closeLoginModal" class="absolute top-5 right-5 text-plum-400 hover:text-plum-800">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <p class="letter-spaced uppercase text-plum-500 text-xs mb-3">Restricted Area</p>
+    <h3 class="font-display text-3xl text-plum-950 mb-6">Admin Sign In</h3>
+    <form id="loginForm" class="space-y-4">
+      <div>
+        <label class="text-xs letter-spaced uppercase text-plum-500 block mb-2">Password</label>
+        <input id="loginPassword" type="password" required autocomplete="current-password"
+               class="w-full border border-plum-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-plum-300" placeholder="••••">
+      </div>
+      <p id="loginError" class="hidden text-sm text-rose-600">Incorrect password. Please try again.</p>
+      <button type="submit" class="w-full bg-plum-900 hover:bg-plum-700 text-white py-3.5 rounded-xl text-sm letter-spaced uppercase transition-colors">Enter Dashboard</button>
+    </form>
+  </div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[70] bg-plum-950 text-white text-sm px-6 py-3.5 rounded-full shadow-2xl"></div>
+
+<!-- ============================================================ -->
+<!-- ============ ADMIN DASHBOARD (hidden by default) ============ -->
+<!-- ============================================================ -->
+<div id="adminView" class="hidden fixed inset-0 z-[55] bg-[#fbfaf9] overflow-y-auto">
+  <header class="sticky top-0 bg-plum-950 text-white z-10">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
+      <div>
+        <p class="font-display text-2xl">JEWERLY O&amp;A <span class="text-plum-300 text-sm font-body letter-spaced uppercase align-middle ml-2">Admin</span></p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="viewStoreBtn" class="text-xs letter-spaced uppercase border border-plum-600 hover:bg-plum-800 px-4 py-2 rounded-full transition-colors">View Storefront</button>
+        <button id="logoutBtn" class="text-xs letter-spaced uppercase bg-plum-100 text-plum-900 hover:bg-white px-4 py-2 rounded-full transition-colors">Log Out</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-10">
+
+    <div class="grid sm:grid-cols-3 gap-5 mb-10">
+      <div class="bg-white border border-plum-100 rounded-2xl p-6">
+        <p class="text-xs letter-spaced uppercase text-plum-400 mb-2">Total Pieces</p>
+        <p id="statTotal" class="font-display text-4xl text-plum-950">0</p>
+      </div>
+      <div class="bg-white border border-plum-100 rounded-2xl p-6">
+        <p class="text-xs letter-spaced uppercase text-plum-400 mb-2">Catalog Value</p>
+        <p id="statValue" class="font-display text-4xl text-plum-950">$0</p>
+      </div>
+      <div class="bg-white border border-plum-100 rounded-2xl p-6">
+        <p class="text-xs letter-spaced uppercase text-plum-400 mb-2">Collections</p>
+        <p id="statCollections" class="font-display text-4xl text-plum-950">0</p>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="font-display text-3xl text-plum-950">Manage Catalog</h2>
+      <button id="newItemBtn" class="inline-flex items-center gap-2 bg-plum-900 hover:bg-plum-700 text-white text-xs letter-spaced uppercase px-5 py-3 rounded-full transition-colors">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Add New Piece
+      </button>
+    </div>
+
+    <!-- Item Form -->
+    <div id="itemFormWrap" class="hidden bg-white border border-plum-100 rounded-3xl p-6 sm:p-8 mb-10">
+      <div class="flex items-center justify-between mb-6">
+        <h3 id="formTitle" class="font-display text-2xl text-plum-900">New Piece</h3>
+        <button id="cancelFormBtn" class="text-plum-400 hover:text-plum-800">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <form id="itemForm" class="grid md:grid-cols-2 gap-6">
+        <input type="hidden" id="itemId">
+
+        <div class="md:col-span-2 grid sm:grid-cols-2 gap-6">
+          <div>
+            <label class="text-xs letter-spaced uppercase text-plum-500 block mb-2">Item Name *</label>
+            <input id="itemName" required type="text" class="w-full border border-plum-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-plum-300" placeholder="e.g. Vintage Amethyst Halo Ring">
+          </div>
+          <div>
+            <label class="text-xs letter-spaced uppercase text-plum-500 block mb-2">Price (USD) *</label>
+            <input id="itemPrice" required type="number" min="0" step="0.01" class="w-full border border-plum-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-plum-300" placeholder="e.g. 249.00">
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs letter-spaced uppercase text-plum-500 block mb-2">Collection</label>
+          <select id="itemCollection" class="w-full border border-plum-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-plum-300">
+            <option>Rings</option>
+            <option>Necklaces</option>
+            <option>Earrings</option>
+            <option>Bracelets</option>
+            <option>Bridal</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs letter-spaced uppercase text-plum-500 block mb-2">Mark as</label>
+          <select id="itemBadge" class="w-full border border-plum-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-plum-300">
+            <option value="">None</option>
+            <option value="New Arrival">New Arrival</option>
+            <option value="Best Seller">Best Seller</option>
+            <option value="Limited">Limited Edition</option>
+            <option value="Sold">Sold</option>
+          </select>
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="text-xs letter-spaced uppercase text-plum-500 block mb-2">Description *</label>
+          <textarea id="itemDescription" required rows="4" class="w-full border border-plum-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-plum-300" placeholder="Describe the materials, stones, sizing, and story behind this piece…"></textarea>
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="text-xs letter-spaced uppercase text-plum-500 block mb-2">Main Image *</label>
+          <div class="flex flex-wrap items-center gap-4">
+            <input id="itemMainImageFile" type="file" accept="image/*" class="text-sm">
+            <span class="text-plum-300 text-xs">or paste a URL</span>
+            <input id="itemMainImageUrl" type="text" placeholder="https://…" class="flex-1 min-w-[180px] border border-plum-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-plum-300">
+          </div>
+          <img id="mainImagePreview" class="hidden mt-4 w-28 h-28 object-cover rounded-xl border border-plum-100">
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="text-xs letter-spaced uppercase text-plum-500 block mb-2">Additional Gallery Images</label>
+          <div class="flex flex-wrap items-center gap-4">
+            <input id="itemGalleryFiles" type="file" accept="image/*" multiple class="text-sm">
+            <span class="text-plum-300 text-xs">or paste a URL then press Add</span>
+            <input id="itemGalleryUrl" type="text" placeholder="https://…" class="flex-1 min-w-[180px] border border-plum-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-plum-300">
+            <button type="button" id="addGalleryUrlBtn" class="text-xs letter-spaced uppercase bg-plum-100 hover:bg-plum-200 text-plum-800 px-4 py-2.5 rounded-xl">Add</button>
+          </div>
+          <div id="galleryPreview" class="flex flex-wrap gap-3 mt-4"></div>
+        </div>
+
+        <div class="md:col-span-2 flex flex-wrap items-center gap-4 pt-2">
+          <button type="submit" class="bg-plum-900 hover:bg-plum-700 text-white px-8 py-3.5 rounded-full text-sm letter-spaced uppercase transition-colors">Save Piece</button>
+          <button type="button" id="cancelFormBtn2" class="text-plum-500 text-sm letter-spaced uppercase hover:text-plum-800">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Admin item list -->
+    <div id="adminList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    <div id="adminEmptyState" class="hidden text-center py-24">
+      <p class="font-display text-2xl text-plum-800 mb-2">Your catalog is empty</p>
+      <p class="text-plum-500 text-sm">Click "Add New Piece" to list your first item.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DELETE CONFIRM MODAL ============ -->
+<div id="deleteModal" data-modal class="fixed inset-0 z-[65] hidden opacity-0 items-center justify-center p-5">
+  <div class="absolute inset-0 bg-plum-950/70 backdrop-blur-sm" id="deleteBackdrop"></div>
+  <div class="relative bg-white w-full max-w-sm rounded-3xl p-8 text-center">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#b23a48" stroke-width="1.4" class="mx-auto mb-5"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+    <h3 class="font-display text-2xl text-plum-950 mb-2">Remove this piece?</h3>
+    <p class="text-plum-500 text-sm mb-7">This will permanently delete it from your live storefront. This cannot be undone.</p>
+    <div class="flex gap-3">
+      <button id="cancelDeleteBtn" class="flex-1 border border-plum-200 text-plum-700 py-3 rounded-xl text-sm letter-spaced uppercase">Cancel</button>
+      <button id="confirmDeleteBtn" class="flex-1 bg-rose-700 hover:bg-rose-800 text-white py-3 rounded-xl text-sm letter-spaced uppercase">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   JEWERLY O&A — storefront + admin, single-file vanilla JS build
+   Persistence: localStorage (client-side only, matches static-file req)
+   ================================================================ */
+
+(function () {
+  "use strict";
+
+  // ---------- CONFIG ----------
+  const WHATSAPP_NUMBER = "972504719859"; // <-- replace with your real WhatsApp number, digits only, country code first
+  const ADMIN_PASSWORD = "1234";
+  const STORAGE_KEY = "joa_catalog_v1";
+  const SESSION_KEY = "joa_admin_session";
+
+  const PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=1200&auto=format&fit=crop";
+
+  // ---------- SEED DATA (first run only) ----------
+  const SEED_PRODUCTS = [
+    {
+      id: "seed-1",
+      name: "Vintage Amethyst Halo Ring",
+      price: 289,
+      collection: "Rings",
+      badge: "Best Seller",
+      description: "A deep violet amethyst, hand-set in a halo of pavé cubic zirconia and finished in warm 18k gold vermeil over sterling silver. The band is comfort-fit for everyday wear, from morning coffee to evening dinners.\n\nStone: Natural amethyst, 1.4ct\nMetal: 18k gold vermeil, sterling silver base\nSizing: Adjustable, fits US 5–8",
+      mainImage: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop",
+      gallery: [
+        "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1603561596112-0a132b757442?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1200&auto=format&fit=crop"
+      ]
+    },
+    {
+      id: "seed-2",
+      name: "Whisperlight Pearl Drop Necklace",
+      price: 168,
+      collection: "Necklaces",
+      badge: "New Arrival",
+      description: "A single freshwater pearl suspended on a fine box-chain, sitting just above the collarbone. Designed to be worn alone or layered beneath a longer piece.\n\nChain: 16in + 2in extender, sterling silver\nPearl: 9mm freshwater, hand-selected for luster",
+      mainImage: "https://images.unsplash.com/photo-1620656798579-1984d9e87df7?q=80&w=1200&auto=format&fit=crop",
+      gallery: [
+        "https://images.unsplash.com/photo-1620656798579-1984d9e87df7?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=1200&auto=format&fit=crop"
+      ]
+    },
+    {
+      id: "seed-3",
+      name: "Emerald Cascade Drop Earrings",
+      price: 342,
+      collection: "Earrings",
+      badge: "Limited",
+      description: "Lab-grown emeralds cascade beneath a delicate gold-filled ear wire, catching movement with every turn of the head. Lightweight enough for all-day wear, striking enough for evening.\n\nStones: Lab-grown emerald, 2 x 0.6ct\nMetal: 14k gold-filled\nLength: 3.8cm drop",
+      mainImage: "https://images.unsplash.com/photo-1633555211564-a9017c9c3e6b?q=80&w=1200&auto=format&fit=crop",
+      gallery: [
+        "https://images.unsplash.com/photo-1633555211564-a9017c9c3e6b?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1631982690223-8aa4c48fe2c8?q=80&w=1200&auto=format&fit=crop"
+      ]
+    },
+    {
+      id: "seed-4",
+      name: "Ondine Bangle, Brushed Gold",
+      price: 121,
+      collection: "Bracelets",
+      badge: "",
+      description: "An open-cuff bangle in brushed 18k gold vermeil, inspired by the curve of a river stone worn smooth over years. Sits slightly loose for a modern, unstudied look.\n\nMetal: 18k gold vermeil\nFit: One size, adjustable opening",
+      mainImage: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=1200&auto=format&fit=crop",
+      gallery: [
+        "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1200&auto=format&fit=crop"
+      ]
+    },
+    {
+      id: "seed-5",
+      name: "Solene Bridal Cluster Ring",
+      price: 615,
+      collection: "Bridal",
+      badge: "Best Seller",
+      description: "A cluster of round-cut moissanite stones set low to the finger, designed for brides who want the sparkle of a statement ring with the comfort of a stackable band.\n\nStones: Moissanite cluster, 1.8ct total\nMetal: 14k white gold\nSizing: Made to order, US 4–9",
+      mainImage: "https://images.unsplash.com/photo-1603974372039-adc49044b6bd?q=80&w=1200&auto=format&fit=crop",
+      gallery: [
+        "https://images.unsplash.com/photo-1603974372039-adc49044b6bd?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop"
+      ]
+    },
+    {
+      id: "seed-6",
+      name: "Meridian Layered Chain Set",
+      price: 96,
+      collection: "Necklaces",
+      badge: "New Arrival",
+      description: "Two fine chains of differing weight, pre-layered so you never have to untangle them again. One carries a tiny compass charm, the other sits plain.\n\nChain: 16in & 18in, gold vermeil\nCharm: 10mm compass, engravable on request",
+      mainImage: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1200&auto=format&fit=crop",
+      gallery: [
+        "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1620656798579-1984d9e87df7?q=80&w=1200&auto=format&fit=crop"
+      ]
+    }
+  ];
+
+  // ---------- STATE ----------
+  let products = [];
+  let activeCollection = "All";
+  let searchTerm = "";
+  let sortMode = "curated";
+  let pendingGalleryImages = [];
+  let currentGalleryIndex = 0;
+  let currentModalProduct = null;
+  let deleteTargetId = null;
+
+  // ---------- STORAGE HELPERS ----------
+  function loadProducts() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        products = JSON.parse(raw);
+      } else {
+        products = SEED_PRODUCTS.slice();
+        saveProducts();
+      }
+    } catch (e) {
+      products = SEED_PRODUCTS.slice();
+    }
+  }
+
+  function saveProducts() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+  }
+
+  function isAdminSession() {
+    return sessionStorage.getItem(SESSION_KEY) === "true";
+  }
+
+  // ---------- UTIL ----------
+  function formatPrice(n) {
+    return "$" + Number(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function whatsappLink(product) {
+    const base = product
+      ? `Hello JEWERLY O&A, I am interested in purchasing the ${product.name} for ${formatPrice(product.price)}. Is it available?`
+      : `Hello JEWERLY O&A, I'd like to ask about your jewelry collection.`;
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(base)}`;
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.textContent = msg;
+    toast.classList.remove("hidden");
+    toast.classList.add("toast-enter");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.add("hidden"), 2600);
+  }
+
+  function fileToDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function openModalEl(el) {
+    el.classList.remove("hidden");
+    el.classList.add("flex");
+    requestAnimationFrame(() => el.classList.remove("opacity-0"));
+    document.body.style.overflow = "hidden";
+  }
+  function closeModalEl(el) {
+    el.classList.add("opacity-0");
+    document.body.style.overflow = "";
+    setTimeout(() => {
+      el.classList.add("hidden");
+      el.classList.remove("flex");
+    }, 250);
+  }
+
+  // ---------- WHATSAPP LINKS (global CTAs) ----------
+  function refreshGlobalWhatsappLinks() {
+    document.getElementById("navWhatsapp").href = whatsappLink(null);
+    document.getElementById("careWhatsapp").href = whatsappLink(null);
+    document.getElementById("ctaWhatsapp").href = whatsappLink(null);
+  }
+
+  // ================= STOREFRONT RENDERING =================
+
+  function getCollections() {
+    const set = new Set(products.map(p => p.collection || "Uncategorized"));
+    return ["All", ...Array.from(set)];
+  }
+
+  function renderTabs() {
+    const wrap = document.getElementById("collectionTabs");
+    const collections = getCollections();
+    wrap.innerHTML = collections.map(c => `
+      <button data-tab="${escapeHtml(c)}"
+        class="tab-btn whitespace-nowrap px-5 py-2.5 rounded-full text-xs letter-spaced uppercase border transition-colors ${
+          c === activeCollection
+            ? "bg-plum-900 border-plum-900 text-white"
+            : "bg-white border-plum-200 text-plum-600 hover:border-plum-400"
+        }">${escapeHtml(c)}</button>
+    `).join("");
+
+    wrap.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeCollection = btn.dataset.tab;
+        renderTabs();
+        renderCatalog();
+      });
+    });
+  }
+
+  function getFilteredSortedProducts() {
+    let list = products.slice();
+    if (activeCollection !== "All") {
+      list = list.filter(p => (p.collection || "Uncategorized") === activeCollection);
+    }
+    if (searchTerm.trim()) {
+      const term = searchTerm.trim().toLowerCase();
+      list = list.filter(p => p.name.toLowerCase().includes(term));
+    }
+    switch (sortMode) {
+      case "price-asc": list.sort((a, b) => a.price - b.price); break;
+      case "price-desc": list.sort((a, b) => b.price - a.price); break;
+      case "name-asc": list.sort((a, b) => a.name.localeCompare(b.name)); break;
+      default: break;
+    }
+    return list;
+  }
+
+  function badgeColor(badge) {
+    switch (badge) {
+      case "New Arrival": return "bg-plum-700";
+      case "Best Seller": return "bg-amber-700";
+      case "Limited": return "bg-rose-800";
+      case "Sold": return "bg-plum-400";
+      default: return "";
+    }
+  }
+
+  function renderCatalog() {
+    const grid = document.getElementById("catalogGrid");
+    const empty = document.getElementById("emptyState");
+    const list = getFilteredSortedProducts();
+
+    if (list.length === 0) {
+      grid.innerHTML = "";
+      empty.classList.remove("hidden");
+      empty.classList.add("flex");
+      return;
+    }
+    empty.classList.add("hidden");
+    empty.classList.remove("flex");
+
+    grid.innerHTML = list.map((p, i) => `
+      <article class="catalog-card group cursor-pointer reveal" style="animation-delay:${Math.min(i * 0.05, 0.4)}s" data-id="${p.id}">
+        <div class="card-media rounded-2xl">
+          <img src="${escapeHtml(p.mainImage || PLACEHOLDER_IMG)}" alt="${escapeHtml(p.name)}" loading="lazy">
+          ${p.badge ? `<span class="absolute top-3 left-3 ${badgeColor(p.badge)} text-white text-[10px] letter-spaced uppercase px-3 py-1.5 rounded-full">${escapeHtml(p.badge)}</span>` : ""}
+          <div class="card-quickview absolute bottom-3 left-3 right-3">
+            <div class="lens-badge text-white text-[11px] letter-spaced uppercase text-center py-2.5 rounded-full">Quick View</div>
+          </div>
+        </div>
+        <div class="pt-3.5 px-0.5">
+          <p class="text-[10px] letter-spaced uppercase text-plum-400 mb-1">${escapeHtml(p.collection || "")}</p>
+          <h3 class="font-display text-lg sm:text-xl text-plum-950 leading-snug mb-1">${escapeHtml(p.name)}</h3>
+          <p class="text-plum-700 font-semibold text-sm sm:text-base">${formatPrice(p.price)}</p>
+        </div>
+      </article>
+    `).join("");
+
+    grid.querySelectorAll(".catalog-card").forEach(card => {
+      card.addEventListener("click", () => openProductModal(card.dataset.id));
+    });
+  }
+
+  function openProductModal(id) {
+    const product = products.find(p => p.id === id);
+    if (!product) return;
+    currentModalProduct = product;
+    currentGalleryIndex = 0;
+
+    document.getElementById("modalCollection").textContent = product.collection || "";
+    document.getElementById("modalName").textContent = product.name;
+    document.getElementById("modalPrice").textContent = formatPrice(product.price);
+    document.getElementById("modalDescription").textContent = product.description || "";
+    document.getElementById("modalWhatsappBtn").href = whatsappLink(product);
+
+    const images = [product.mainImage, ...(product.gallery || [])].filter(Boolean);
+    renderModalGallery(images);
+
+    openModalEl(document.getElementById("productModal"));
+  }
+
+  function renderModalGallery(images) {
+    const mainImg = document.getElementById("modalMainImage");
+    const thumbsWrap = document.getElementById("modalThumbs");
+    if (images.length === 0) images = [PLACEHOLDER_IMG];
+
+    function setActive(idx) {
+      currentGalleryIndex = idx;
+      mainImg.style.opacity = 0;
+      setTimeout(() => {
+        mainImg.src = images[idx];
+        mainImg.style.transition = "opacity .3s ease";
+        mainImg.style.opacity = 1;
+      }, 120);
+      thumbsWrap.querySelectorAll(".gallery-thumb").forEach((t, i) => {
+        t.classList.toggle("active", i === idx);
+      });
+    }
+
+    thumbsWrap.innerHTML = images.map((src, i) => `
+      <button class="gallery-thumb ${i === 0 ? "active" : ""} shrink-0 w-16 h-16 rounded-lg overflow-hidden border border-plum-100">
+        <img src="${escapeHtml(src)}" class="w-full h-full object-cover">
+      </button>
+    `).join("");
+
+    thumbsWrap.querySelectorAll(".gallery-thumb").forEach((btn, i) => {
+      btn.addEventListener("click", () => setActive(i));
+    });
+
+    setActive(0);
+  }
+
+  // ================= ADMIN: AUTH =================
+
+  function showLoginModal() {
+    document.getElementById("loginError").classList.add("hidden");
+    document.getElementById("loginPassword").value = "";
+    openModalEl(document.getElementById("loginModal"));
+    setTimeout(() => document.getElementById("loginPassword").focus(), 200);
+  }
+
+  function enterAdmin() {
+    sessionStorage.setItem(SESSION_KEY, "true");
+    closeModalEl(document.getElementById("loginModal"));
+    document.getElementById("adminView").classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    renderAdminList();
+    renderAdminStats();
+  }
+
+  function exitAdmin() {
+    sessionStorage.removeItem(SESSION_KEY);
+    document.getElementById("adminView").classList.add("hidden");
+    document.body.style.overflow = "";
+    hideItemForm();
+    renderTabs();
+    renderCatalog();
+  }
+
+  document.getElementById("adminNavBtn").addEventListener("click", showLoginModal);
+  document.getElementById("adminNavBtnFooter").addEventListener("click", showLoginModal);
+  document.getElementById("closeLoginModal").addEventListener("click", () => closeModalEl(document.getElementById("loginModal")));
+  document.getElementById("loginBackdrop").addEventListener("click", () => closeModalEl(document.getElementById("loginModal")));
+
+  document.getElementById("loginForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const val = document.getElementById("loginPassword").value;
+    if (val === ADMIN_PASSWORD) {
+      enterAdmin();
+      showToast("Welcome back — dashboard unlocked.");
+    } else {
+      document.getElementById("loginError").classList.remove("hidden");
+    }
+  });
+
+  document.getElementById("viewStoreBtn").addEventListener("click", () => {
+    document.getElementById("adminView").classList.add("hidden");
+    document.body.style.overflow = "";
+  });
+  document.getElementById("logoutBtn").addEventListener("click", exitAdmin);
+
+  // ================= ADMIN: DASHBOARD RENDER =================
+
+  function renderAdminStats() {
+    document.getElementById("statTotal").textContent = products.length;
+    const totalValue = products.reduce((sum, p) => sum + Number(p.price || 0), 0);
+    document.getElementById("statValue").textContent = formatPrice(totalValue);
+    document.getElementById("statCollections").textContent = new Set(products.map(p => p.collection)).size;
+  }
+
+  function renderAdminList() {
+    const list = document.getElementById("adminList");
+    const empty = document.getElementById("adminEmptyState");
+
+    if (products.length === 0) {
+      list.innerHTML = "";
+      empty.classList.remove("hidden");
+      return;
+    }
+    empty.classList.add("hidden");
+
+    list.innerHTML = products.map(p => `
+      <div class="bg-white border border-plum-100 rounded-2xl overflow-hidden group">
+        <div class="aspect-[4/3] overflow-hidden bg-plum-50 relative">
+          <img src="${escapeHtml(p.mainImage || PLACEHOLDER_IMG)}" class="w-full h-full object-cover">
+          ${p.badge ? `<span class="absolute top-2 left-2 ${badgeColor(p.badge)} text-white text-[10px] letter-spaced uppercase px-2.5 py-1 rounded-full">${escapeHtml(p.badge)}</span>` : ""}
+        </div>
+        <div class="p-4">
+          <p class="text-[10px] letter-spaced uppercase text-plum-400 mb-1">${escapeHtml(p.collection || "")}</p>
+          <h4 class="font-display text-lg text-plum-950 mb-1 truncate">${escapeHtml(p.name)}</h4>
+          <p class="text-plum-700 font-semibold mb-3">${formatPrice(p.price)}</p>
+          <div class="flex gap-2">
+            <button data-edit="${p.id}" class="flex-1 border border-plum-200 hover:border-plum-500 text-plum-700 text-xs letter-spaced uppercase py-2 rounded-full">Edit</button>
+            <button data-delete="${p.id}" class="flex-1 border border-rose-200 hover:bg-rose-50 text-rose-700 text-xs letter-spaced uppercase py-2 rounded-full">Delete</button>
+          </div>
+        </div>
+      </div>
+    `).join("");
+
+    list.querySelectorAll("[data-edit]").forEach(btn =>
+      btn.addEventListener("click", () => openItemForm(btn.dataset.edit)));
+    list.querySelectorAll("[data-delete]").forEach(btn =>
+      btn.addEventListener("click", () => promptDelete(btn.dataset.delete)));
+  }
+
+  // ================= ADMIN: ITEM FORM =================
+
+  function resetForm() {
+    document.getElementById("itemForm").reset();
+    document.getElementById("itemId").value = "";
+    document.getElementById("mainImagePreview").classList.add("hidden");
+    document.getElementById("mainImagePreview").src = "";
+    document.getElementById("galleryPreview").innerHTML = "";
+    pendingGalleryImages = [];
+  }
+
+  function showItemForm(title) {
+    document.getElementById("formTitle").textContent = title;
+    document.getElementById("itemFormWrap").classList.remove("hidden");
+    document.getElementById("itemFormWrap").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function hideItemForm() {
+    document.getElementById("itemFormWrap").classList.add("hidden");
+    resetForm();
+  }
+
+  function openItemForm(id) {
+    resetForm();
+    if (!id) {
+      showItemForm("New Piece");
+      return;
+    }
+    const p = products.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById("itemId").value = p.id;
+    document.getElementById("itemName").value = p.name;
+    document.getElementById("itemPrice").value = p.price;
+    document.getElementById("itemCollection").value = p.collection || "Rings";
+    document.getElementById("itemBadge").value = p.badge || "";
+    document.getElementById("itemDescription").value = p.description || "";
+    document.getElementById("itemMainImageUrl").value = p.mainImage && p.mainImage.startsWith("data:") ? "" : (p.mainImage || "");
+
+    if (p.mainImage) {
+      document.getElementById("mainImagePreview").src = p.mainImage;
+      document.getElementById("mainImagePreview").classList.remove("hidden");
+    }
+    pendingGalleryImages = (p.gallery || []).slice();
+    renderGalleryPreview();
+    showItemForm("Edit Piece");
+  }
+
+  function renderGalleryPreview() {
+    const wrap = document.getElementById("galleryPreview");
+    wrap.innerHTML = pendingGalleryImages.map((src, i) => `
+      <div class="relative w-20 h-20">
+        <img src="${escapeHtml(src)}" class="w-full h-full object-cover rounded-lg border border-plum-100">
+        <button type="button" data-remove-gallery="${i}" class="absolute -top-2 -right-2 w-5 h-5 bg-rose-700 text-white rounded-full text-[10px] flex items-center justify-center">&times;</button>
+      </div>
+    `).join("");
+    wrap.querySelectorAll("[data-remove-gallery]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        pendingGalleryImages.splice(Number(btn.dataset.removeGallery), 1);
+        renderGalleryPreview();
+      });
+    });
+  }
+
+  document.getElementById("newItemBtn").addEventListener("click", () => openItemForm(null));
+  document.getElementById("cancelFormBtn").addEventListener("click", hideItemForm);
+  document.getElementById("cancelFormBtn2").addEventListener("click", hideItemForm);
+
+  document.getElementById("itemMainImageFile").addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const dataUrl = await fileToDataUrl(file);
+    document.getElementById("itemMainImageUrl").value = "";
+    document.getElementById("mainImagePreview").src = dataUrl;
+    document.getElementById("mainImagePreview").classList.remove("hidden");
+    document.getElementById("mainImagePreview").dataset.dataurl = dataUrl;
+  });
+
+  document.getElementById("itemGalleryFiles").addEventListener("change", async (e) => {
+    const files = Array.from(e.target.files || []);
+    for (const file of files) {
+      const dataUrl = await fileToDataUrl(file);
+      pendingGalleryImages.push(dataUrl);
+    }
+    renderGalleryPreview();
+    e.target.value = "";
+  });
+
+  document.getElementById("addGalleryUrlBtn").addEventListener("click", () => {
+    const input = document.getElementById("itemGalleryUrl");
+    const val = input.value.trim();
+    if (!val) return;
+    pendingGalleryImages.push(val);
+    input.value = "";
+    renderGalleryPreview();
+  });
+
+  document.getElementById("itemForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const id = document.getElementById("itemId").value || ("item-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7));
+    const name = document.getElementById("itemName").value.trim();
+    const price = parseFloat(document.getElementById("itemPrice").value);
+    const collection = document.getElementById("itemCollection").value;
+    const badge = document.getElementById("itemBadge").value;
+    const description = document.getElementById("itemDescription").value.trim();
+
+    const preview = document.getElementById("mainImagePreview");
+    const urlInput = document.getElementById("itemMainImageUrl").value.trim();
+    let mainImage = "";
+    if (preview.dataset.dataurl && preview.src === preview.dataset.dataurl) {
+      mainImage = preview.dataset.dataurl;
+    } else if (urlInput) {
+      mainImage = urlInput;
+    } else if (preview.src && !preview.classList.contains("hidden")) {
+      mainImage = preview.src;
+    }
+
+    if (!name || isNaN(price) || !description || !mainImage) {
+      showToast("Please fill in name, price, description, and a main image.");
+      return;
+    }
+
+    const existingIndex = products.findIndex(p => p.id === id);
+    const productObj = {
+      id, name, price, collection, badge, description,
+      mainImage,
+      gallery: pendingGalleryImages.slice()
+    };
+
+    if (existingIndex >= 0) {
+      products[existingIndex] = productObj;
+      showToast("Piece updated successfully.");
+    } else {
+      products.unshift(productObj);
+      showToast("New piece added to your catalog.");
+    }
+
+    saveProducts();
+    hideItemForm();
+    renderAdminList();
+    renderAdminStats();
+    renderTabs();
+    renderCatalog();
+  });
+
+  // ================= ADMIN: DELETE =================
+
+  function promptDelete(id) {
+    deleteTargetId = id;
+    openModalEl(document.getElementById("deleteModal"));
+  }
+
+  document.getElementById("cancelDeleteBtn").addEventListener("click", () => {
+    deleteTargetId = null;
+    closeModalEl(document.getElementById("deleteModal"));
+  });
+  document.getElementById("deleteBackdrop").addEventListener("click", () => closeModalEl(document.getElementById("deleteModal")));
+
+  document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
+    if (!deleteTargetId) return;
+    products = products.filter(p => p.id !== deleteTargetId);
+    saveProducts();
+    deleteTargetId = null;
+    closeModalEl(document.getElementById("deleteModal"));
+    renderAdminList();
+    renderAdminStats();
+    renderTabs();
+    renderCatalog();
+    showToast("Piece removed from your catalog.");
+  });
+
+  // ================= GLOBAL UI WIRING =================
+
+  document.getElementById("closeProductModal").addEventListener("click", () => closeModalEl(document.getElementById("productModal")));
+  document.getElementById("productModalBackdrop").addEventListener("click", () => closeModalEl(document.getElementById("productModal")));
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    [document.getElementById("productModal"), document.getElementById("loginModal"), document.getElementById("deleteModal")].forEach(m => {
+      if (!m.classList.contains("hidden")) closeModalEl(m);
+    });
+  });
+
+  document.getElementById("mobileMenuBtn").addEventListener("click", () => {
+    document.getElementById("mobileMenu").classList.toggle("hidden");
+  });
+  document.querySelectorAll("#mobileMenu a").forEach(a =>
+    a.addEventListener("click", () => document.getElementById("mobileMenu").classList.add("hidden")));
+
+  document.getElementById("searchInput").addEventListener("input", (e) => {
+    searchTerm = e.target.value;
+    renderCatalog();
+  });
+  document.getElementById("sortSelect").addEventListener("change", (e) => {
+    sortMode = e.target.value;
+    renderCatalog();
+  });
+
+  window.addEventListener("scroll", () => {
+    const header = document.getElementById("siteHeader");
+    if (window.scrollY > 12) header.classList.add("shadow-sm");
+    else header.classList.remove("shadow-sm");
+  });
+
+  // ================= INIT =================
+
+  function init() {
+    document.getElementById("year").textContent = new Date().getFullYear();
+    loadProducts();
+    refreshGlobalWhatsappLinks();
+    renderTabs();
+    renderCatalog();
+
+    if (isAdminSession()) {
+      document.getElementById("adminView").classList.remove("hidden");
+      renderAdminList();
+      renderAdminStats();
+    }
+  }
+
+  init();
+})();
+</script>
+
+</body>
+</html>
