@@ -11,8 +11,10 @@ The page renders two mutually-exclusive views within the same DOM:
 
 ## State management
 
-- `products` (in-memory array) is the single source of truth for the catalog while the page is open. It's read from and written to `localStorage` under the key `joa_catalog_v1` via `loadProducts()` / `saveProducts()`.
-- On first load with no existing `localStorage` entry, the catalog is seeded from the `SEED_PRODUCTS` constant so the storefront never appears empty.
+- The shared catalog lives in Firebase Realtime Database (`FIREBASE_DB_URL`, path `/products`), accessed via the REST API (`fetch` GET/PUT on `/products.json`) — no Firebase SDK. `loadProducts()` fetches it; `saveProducts()` PUTs the whole `products` array.
+- `localStorage` (`joa_catalog_v1`) is only a cache used to render instantly before the Firebase fetch completes, and as a fallback if Firebase is unreachable.
+- If the Firebase `/products` path is empty, it is seeded from the cached catalog (or `SEED_PRODUCTS` if there is no cache). Firebase drops empty arrays, so `normalizeProducts()` restores missing `gallery`/`badge` fields.
+- The database rules must allow public read and write on `/products` for this to work.
 - Admin login state lives in `sessionStorage` (`joa_admin_session`) — intentionally session-scoped, not persisted to `localStorage`, so the dashboard isn't left unlocked indefinitely.
 - Uploaded images (main + gallery) are converted to base64 data URLs via `FileReader` and stored directly inside the product object in `localStorage`. There is no separate object storage — this keeps the app a single static file with zero backend dependencies, at the cost of `localStorage`'s ~5-10MB size ceiling if an admin uploads many/large images.
 
@@ -32,6 +34,6 @@ The page renders two mutually-exclusive views within the same DOM:
 
 ## Known limitations / non-obvious decisions
 
-- Catalog data is per-browser (`localStorage`), not shared across devices or visitors. This was a deliberate requirement (fully static file, no server/database) rather than an oversight — see the README for the tradeoff.
+- Catalog data is shared across all visitors through Firebase. Because the admin password check is client-side, the Firebase write rule is effectively open to anyone who knows the database URL.
 - The admin password (`1234` by default) is checked client-side in plain JavaScript, which means it is visible to anyone who reads the page source. This is acceptable for the stated use case (a single trusted admin deterring casual visitors) but is not real authentication — do not extend this pattern to protect genuinely sensitive data without adding a real backend.
 - `WHATSAPP_NUMBER` and `ADMIN_PASSWORD` are hardcoded constants near the top of the `<script>` block in `index.html` — update them there before deploying for a real business.

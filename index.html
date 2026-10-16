@@ -603,7 +603,7 @@
 <script>
 /* ================================================================
    JEWERLY O&A — storefront + admin, single-file vanilla JS build
-   Persistence: localStorage (client-side only, matches static-file req)
+   Persistence: Firebase Realtime Database (REST), localStorage as offline cache
    ================================================================ */
 
 (function () {
@@ -613,6 +613,8 @@
   const WHATSAPP_NUMBER = "972504719859"; // <-- replace with your real WhatsApp number, digits only, country code first
   const ADMIN_PASSWORD = "1234";
   const STORAGE_KEY = "joa_catalog_v1";
+  const FIREBASE_DB_URL = "https://jewlery-qa-default-rtdb.europe-west1.firebasedatabase.app";
+  const FIREBASE_PRODUCTS_URL = FIREBASE_DB_URL + "/products.json";
   const SESSION_KEY = "joa_admin_session";
 
   const PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=1200&auto=format&fit=crop";
@@ -711,22 +713,71 @@
   let deleteTargetId = null;
 
   // ---------- STORAGE HELPERS ----------
-  function loadProducts() {
+  function normalizeProducts(data) {
+    const list = Array.isArray(data) ? data : Object.values(data || {});
+    return list.filter(Boolean).map(p => ({
+      ...p,
+      badge: p.badge || "",
+      gallery: Array.isArray(p.gallery) ? p.gallery.filter(Boolean) : Object.values(p.gallery || {})
+    }));
+  }
+
+  function loadCachedProducts() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        products = JSON.parse(raw);
-      } else {
-        products = SEED_PRODUCTS.slice();
-        saveProducts();
-      }
+      products = raw ? normalizeProducts(JSON.parse(raw)) : SEED_PRODUCTS.slice();
     } catch (e) {
       products = SEED_PRODUCTS.slice();
     }
   }
 
-  function saveProducts() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+  function cacheProducts() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+    } catch (e) {}
+  }
+
+  async function loadProducts() {
+    try {
+      const res = await fetch(FIREBASE_PRODUCTS_URL, { cache: "no-store" });
+      if (!res.ok) throw new Error("Firebase read failed: " + res.status);
+      const data = await res.json();
+      if (data === null) {
+        await saveProducts();
+      } else {
+        products = normalizeProducts(data);
+        cacheProducts();
+      }
+    } catch (e) {
+      console.error(e);
+      showToast("Couldn't reach the catalog database — showing saved copy.");
+    }
+  }
+
+  async function saveProducts() {
+    cacheProducts();
+    try {
+      const res = await fetch(FIREBASE_PRODUCTS_URL, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(products)
+      });
+      if (!res.ok) throw new Error("Firebase write failed: " + res.status);
+      return true;
+    } catch (e) {
+      console.error(e);
+      showToast("Couldn't save to the catalog database. Please try again.");
+      return false;
+    }
+  }
+
+  function renderAll() {
+    renderTabs();
+    renderCatalog();
+    if (isAdminSession()) {
+      renderAdminList();
+      renderAdminStats();
+    }
   }
 
   function isAdminSession() {
@@ -1121,7 +1172,7 @@
     renderGalleryPreview();
   });
 
-  document.getElementById("itemForm").addEventListener("submit", (e) => {
+  document.getElementById("itemForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const id = document.getElementById("itemId").value || ("item-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7));
@@ -1156,13 +1207,13 @@
 
     if (existingIndex >= 0) {
       products[existingIndex] = productObj;
-      showToast("Piece updated successfully.");
     } else {
       products.unshift(productObj);
-      showToast("New piece added to your catalog.");
     }
 
-    saveProducts();
+    if (await saveProducts()) {
+      showToast(existingIndex >= 0 ? "Piece updated successfully." : "New piece added to your catalog.");
+    }
     hideItemForm();
     renderAdminList();
     renderAdminStats();
@@ -1183,17 +1234,17 @@
   });
   document.getElementById("deleteBackdrop").addEventListener("click", () => closeModalEl(document.getElementById("deleteModal")));
 
-  document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
+  document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
     if (!deleteTargetId) return;
     products = products.filter(p => p.id !== deleteTargetId);
-    saveProducts();
+    const saved = await saveProducts();
     deleteTargetId = null;
     closeModalEl(document.getElementById("deleteModal"));
     renderAdminList();
     renderAdminStats();
     renderTabs();
     renderCatalog();
-    showToast("Piece removed from your catalog.");
+    if (saved) showToast("Piece removed from your catalog.");
   });
 
   // ================= GLOBAL UI WIRING =================
@@ -1233,16 +1284,13 @@
 
   function init() {
     document.getElementById("year").textContent = new Date().getFullYear();
-    loadProducts();
+    loadCachedProducts();
     refreshGlobalWhatsappLinks();
-    renderTabs();
-    renderCatalog();
-
     if (isAdminSession()) {
       document.getElementById("adminView").classList.remove("hidden");
-      renderAdminList();
-      renderAdminStats();
     }
+    renderAll();
+    loadProducts().then(renderAll);
   }
 
   init();
